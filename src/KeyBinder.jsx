@@ -12,6 +12,7 @@ type Props = {
 
 const charCodeToString = (charCode) => {
   switch(charCode) {
+  case 27: return 'esc';
   case 37: return 'left';
   case 38: return 'up';
   case 39: return 'right';

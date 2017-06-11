@@ -195,6 +195,7 @@ export default class DevtoolsInspector extends PureComponent<DefaultProps, Props
           actions, actionIds, isWideLayout, searchValue, selectedActionId, startActionId
         }}
                     styling={styling}
+                    onCancelSelection={this.handleCancelSelection}
                     onSearch={this.handleSearch}
                     onSelect={this.handleSelectAction}
                     onSelectPreviousAction={this.handleSelectPreviousAction}
@@ -295,6 +296,10 @@ export default class DevtoolsInspector extends PureComponent<DefaultProps, Props
     if (actionId !== this.props.monitorState.selectedActionId) {
       this.selectAction(!!e.shiftKey, actionId);
     }
+  }
+
+  handleCancelSelection = () => {
+    this.updateMonitorState({ startActionId: null, selectedActionId: null });
   }
 
   handleInspectPath = (pathType: string, path: string[]) => {

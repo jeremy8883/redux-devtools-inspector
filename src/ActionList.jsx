@@ -64,7 +64,7 @@ export default class ActionList extends PureComponent<void, Props, void> {
     const { styling, actions, actionIds, isWideLayout, onToggleAction, skippedActionIds,
             selectedActionId, startActionId, onSelect, onSearch, searchValue, currentActionId,
             onCommit, onSweep, onJumpToState,
-            onSelectNextAction, onSelectPreviousAction } = this.props;
+            onSelectNextAction, onSelectPreviousAction, onCancelSelection } = this.props;
     const lowerSearchValue = searchValue && searchValue.toLowerCase();
     const filteredActionIds = searchValue ? actionIds.filter(
       id => actions[id].action.type.toLowerCase().indexOf(lowerSearchValue) !== -1
@@ -83,6 +83,9 @@ export default class ActionList extends PureComponent<void, Props, void> {
         }, {
           key: 'alt-down',
           onDown: onSelectNextAction,
+        }, {
+          key: 'esc',
+          onDown: onCancelSelection,
         }] } />
         <ActionListHeader styling={styling}
                           onSearch={onSearch}
