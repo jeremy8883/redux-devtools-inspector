@@ -17,7 +17,7 @@ const charCodeToString = (charCode) => {
   case 38: return 'up';
   case 39: return 'right';
   case 40: return 'down';
-  default: String.fromCharCode(charCode);
+  default: return String.fromCharCode(charCode);
   }
 };
 
