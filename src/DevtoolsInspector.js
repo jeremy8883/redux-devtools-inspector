@@ -13,6 +13,7 @@ import type { Base16Theme, StylingFunction, Theme } from 'react-base16-styling';
 import type { Dispatch } from 'redux';
 import type { Action, MonitorState, TabName } from './types';
 import type { ObjectHash, PropertyFilter, Delta } from 'jsondiffpatch';
+import * as R from 'ramda';
 
 type DefaultProps = {
   supportImmutable: boolean,
@@ -60,6 +61,11 @@ function getCurrentActionId(props, monitorState) {
   return monitorState.selectedActionId === null ?
     props.stagedActionIds[props.currentStateIndex] : monitorState.selectedActionId;
 }
+
+const getSelectedActionIndex = (props) => {
+  const { stagedActionIds, monitorState } = props;
+  return stagedActionIds.findIndex(R.equals(monitorState.selectedActionId));
+};
 
 function getFromState(actionIndex, stagedActionIds, computedStates, monitorState) {
   const { startActionId } = monitorState;
@@ -191,6 +197,8 @@ export default class DevtoolsInspector extends PureComponent<DefaultProps, Props
                     styling={styling}
                     onSearch={this.handleSearch}
                     onSelect={this.handleSelectAction}
+                    onSelectPreviousAction={this.handleSelectPreviousAction}
+                    onSelectNextAction={this.handleSelectNextAction}
                     onToggleAction={this.handleToggleAction}
                     onJumpToState={this.handleJumpToState}
                     onCommit={this.handleCommit}
@@ -235,12 +243,12 @@ export default class DevtoolsInspector extends PureComponent<DefaultProps, Props
     this.updateMonitorState({ searchValue: val });
   };
 
-  handleSelectAction = (e: SyntheticMouseEvent, actionId: number) => {
+  selectAction = (isMultiSelect: boolean, actionId: number) => {
     const { monitorState } = this.props;
     let startActionId;
     let selectedActionId;
 
-    if (e.shiftKey && monitorState.selectedActionId !== null) {
+    if (isMultiSelect && monitorState.selectedActionId !== null) {
       if (monitorState.startActionId !== null) {
         if (actionId >= monitorState.startActionId) {
           startActionId = Math.min(monitorState.startActionId, monitorState.selectedActionId);
@@ -263,7 +271,31 @@ export default class DevtoolsInspector extends PureComponent<DefaultProps, Props
     }
 
     this.updateMonitorState({ startActionId, selectedActionId });
+  }
+
+  handleSelectAction = (e: SyntheticMouseEvent, actionId: number) => {
+    this.selectAction(!!e.shiftKey, actionId);
   };
+
+  handleSelectPreviousAction = (e: SyntheticKeyboardEvent) => {
+    const index = getSelectedActionIndex(this.props);
+    const actionId = index === -1 ?
+        getLastActionId(this.props) :
+        this.props.stagedActionIds[Math.max(0, index - 1)];
+    if (actionId !== this.props.monitorState.selectedActionId) {
+      this.selectAction(!!e.shiftKey, actionId);
+    }
+  }
+
+  handleSelectNextAction = (e: SyntheticKeyboardEvent) => {
+    const index = getSelectedActionIndex(this.props);
+    const actionId = index === -1 ?
+        getLastActionId(this.props) :
+        this.props.stagedActionIds[Math.min(this.props.stagedActionIds.length - 1, index + 1)];
+    if (actionId !== this.props.monitorState.selectedActionId) {
+      this.selectAction(!!e.shiftKey, actionId);
+    }
+  }
 
   handleInspectPath = (pathType: string, path: string[]) => {
     this.updateMonitorState({ [pathType]: path });

@@ -7,7 +7,6 @@ import ActionListHeader from './ActionListHeader';
 import type { StylingFunction } from 'react-base16-styling';
 import type { Action } from './types';
 import KeyBinder from './KeyBinder';
-import * as R from 'ramda';
 
 type Props = {
   styling: StylingFunction,
@@ -22,6 +21,8 @@ type Props = {
   selectedActionId: number,
   startActionId: null | number,
   onSelect: (e: SyntheticMouseEvent, actionId: number) => void,
+  onSelectNextAction: (e: SyntheticKeyboardEvent) => void,
+  onSelectPreviousAction: (e: SyntheticKeyboardEvent) => void,
   onSearch: (searchStr: string) => void,
   searchValue: string,
   currentActionId: number,
@@ -59,35 +60,11 @@ export default class ActionList extends PureComponent<void, Props, void> {
     }
   }
 
-  findSelectedActionIndex() {
-    const { actionIds, selectedActionId } = this.props;
-    return actionIds.findIndex(R.equals(selectedActionId));
-  }
-
-  onPreviousAction(e) {
-    const index = this.findSelectedActionIndex();
-    const actionId = index === -1 ?
-        this.props.lastActionId :
-        this.props.actionIds[Math.max(0, index - 1)];
-    if (actionId !== this.props.selectedActionId) {
-      this.props.onSelect(e, actionId);
-    }
-  }
-
-  onNextAction(e) {
-    const index = this.findSelectedActionIndex();
-    const actionId = index === -1 ?
-        this.props.lastActionId :
-        this.props.actionIds[Math.min(this.props.actionIds.length - 1, index + 1)];
-    if (actionId !== this.props.selectedActionId) {
-      this.props.onSelect(e, actionId);
-    }
-  }
-
   render() {
     const { styling, actions, actionIds, isWideLayout, onToggleAction, skippedActionIds,
             selectedActionId, startActionId, onSelect, onSearch, searchValue, currentActionId,
-            onCommit, onSweep, onJumpToState } = this.props;
+            onCommit, onSweep, onJumpToState,
+            onSelectNextAction, onSelectPreviousAction } = this.props;
     const lowerSearchValue = searchValue && searchValue.toLowerCase();
     const filteredActionIds = searchValue ? actionIds.filter(
       id => actions[id].action.type.toLowerCase().indexOf(lowerSearchValue) !== -1
@@ -102,10 +79,10 @@ export default class ActionList extends PureComponent<void, Props, void> {
       >
         <KeyBinder mappings={ [{
           key: 'alt-up',
-          onDown: (e) => this.onPreviousAction(e),
+          onDown: onSelectPreviousAction,
         }, {
           key: 'alt-down',
-          onDown: (e) => this.onNextAction(e),
+          onDown: onSelectNextAction,
         }] } />
         <ActionListHeader styling={styling}
                           onSearch={onSearch}
