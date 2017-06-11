@@ -26,7 +26,8 @@ type Props = {
   currentActionId: number,
   onCommit: () => void,
   onSweep: () => void,
-  onJumpToState: (actionId: number) => void
+  onJumpToState: (actionId: number) => void,
+  itemComponent: React$Component,
 };
 
 function getTimestamps(actions, actionIds, actionId) {
@@ -61,7 +62,7 @@ export default class ActionList extends PureComponent<void, Props, void> {
   render() {
     const { styling, actions, actionIds, isWideLayout, onToggleAction, skippedActionIds,
             selectedActionId, startActionId, onSelect, onSearch, searchValue, currentActionId,
-            onCommit, onSweep, onJumpToState,
+            onCommit, onSweep, onJumpToState, itemComponent,
             onSelectNextAction, onSelectPreviousAction, onCancelSelection } = this.props;
     const lowerSearchValue = searchValue && searchValue.toLowerCase();
     const filteredActionIds = searchValue ? actionIds.filter(
@@ -108,7 +109,8 @@ export default class ActionList extends PureComponent<void, Props, void> {
                            onToggleClick={() => onToggleAction(actionId)}
                            onJumpClick={() => onJumpToState(actionId)}
                            onCommitClick={() => onCommit(actionId)}
-                           isSkipped={skippedActionIds.indexOf(actionId) !== -1} />
+                           isSkipped={skippedActionIds.indexOf(actionId) !== -1}
+                           itemComponent={ itemComponent } />
           )}
         </div>
       </div>

@@ -3,7 +3,7 @@ This is a personal fork of the redux-devtools-inspector. It aims to add a few ex
 Roadmap/wishlist:
 
 - [x] Add shortcut key support (WIP)
-- [ ] Customizable templates for the task list
+- [x] Customizable templates for the task list
 - [ ] Get a stack trace of where an action was dispatched
 - [ ] Better copy/paste support
 - [ ] Ability to auto restore a saved between page reloads

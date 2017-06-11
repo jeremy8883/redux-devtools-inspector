@@ -36,7 +36,8 @@ type Props = DefaultProps & {
   stagedActions: number[],
 //  select: PropTypes.func.isRequired,
   diffObjectHash: ObjectHash,
-  diffPropertyFilter: PropertyFilter
+  diffPropertyFilter: PropertyFilter,
+  actionListItemComponent: React$Component
 };
 
 type State = {
@@ -179,7 +180,8 @@ export default class DevtoolsInspector extends PureComponent<DefaultProps, Props
 
   render() {
     const { stagedActionIds: actionIds, actionsById: actions, computedStates,
-      tabs, invertTheme, skippedActionIds, currentStateIndex, monitorState } = this.props;
+      tabs, invertTheme, skippedActionIds, currentStateIndex, monitorState,
+      actionListItemComponent } = this.props;
     const { selectedActionId, startActionId, searchValue, tabName } = monitorState;
     const inspectedPathType = tabName === 'Action' ? 'inspectedActionPath' : 'inspectedStatePath';
     const {
@@ -192,7 +194,8 @@ export default class DevtoolsInspector extends PureComponent<DefaultProps, Props
            ref='inspector'
            {...styling(['inspector', isWideLayout ? 'inspectorWide' : null], isWideLayout)}>
         <ActionList {...{
-          actions, actionIds, isWideLayout, searchValue, selectedActionId, startActionId
+          actions, actionIds, isWideLayout, searchValue, selectedActionId,
+          startActionId
         }}
                     styling={styling}
                     onCancelSelection={this.handleCancelSelection}
@@ -206,7 +209,8 @@ export default class DevtoolsInspector extends PureComponent<DefaultProps, Props
                     onSweep={this.handleSweep}
                     skippedActionIds={skippedActionIds}
                     currentActionId={actionIds[currentStateIndex]}
-                    lastActionId={getLastActionId(this.props)} />
+                    lastActionId={getLastActionId(this.props)}
+                    itemComponent={ actionListItemComponent } />
         <ActionPreview {...{
           base16Theme, invertTheme, isWideLayout, tabs, tabName, delta, error, nextState,
           computedStates, action, actions, selectedActionId, startActionId

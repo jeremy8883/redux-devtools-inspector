@@ -25,7 +25,8 @@ type Props = {
   },
   isSkipped: boolean,
   onToggleClick: () => void,
-  onJumpClick: () => void
+  onJumpClick: () => void,
+  itemComponent: React$Component,
 };
 
 type State = {
@@ -37,7 +38,7 @@ export default class ActionListRow extends PureComponent<void, Props, State> {
 
   render() {
     const { styling, isSelected, action, isInitAction, onSelect,
-            timestamps, isSkipped, isInFuture } = this.props;
+            timestamps, isSkipped, isInFuture, itemComponent: ItemComponent } = this.props;
     const { hover } = this.state;
     const timeDelta = timestamps.current - timestamps.previous;
     const showButtons = hover && !isInitAction || isSkipped;
@@ -68,7 +69,10 @@ export default class ActionListRow extends PureComponent<void, Props, State> {
             isSkipped ? 'actionListItemNameSkipped' : null
           ])}
         >
-          {actionType}
+          { ItemComponent ?
+              <ItemComponent action={ action } descriptiveActionType={ actionType } /> :
+              actionType
+          }
         </div>
         <div {...styling('actionListItemButtons')}>
           <RightSlider styling={styling} shown={!showButtons} rotate>

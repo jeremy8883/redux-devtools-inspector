@@ -12,6 +12,7 @@ import { createDevTools, persistState } from 'redux-devtools';
 import DevtoolsInspector from '../../../src/DevtoolsInspector';
 import DockMonitor from 'redux-devtools-dock-monitor';
 import getOptions from './getOptions';
+import ActionListItemComponent from './ActionListItemComponent';
 
 function getDebugSessionKey() {
   const matches = window.location.href.match(/[?&]debug_session=([^&#]+)\b/);
@@ -40,6 +41,7 @@ const getDevTools = options =>
                          shouldPersistState
                          invertTheme={!options.dark}
                          supportImmutable={options.supportImmutable}
+                         actionListItemComponent={ ActionListItemComponent }
                          tabs={defaultTabs => [{
                            name: 'Custom Tab',
                            component: CustomComponent

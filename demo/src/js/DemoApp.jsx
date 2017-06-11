@@ -167,6 +167,12 @@ class DemoApp extends React.Component {
             <Button onClick={this.props.shuffleArray} style={styles.button}>
               Shuffle Array
             </Button>
+            <Button onClick={this.props.requestSuccess} style={styles.button}>
+              Request Success
+            </Button>
+            <Button onClick={this.props.requestError} style={styles.button}>
+              Request Error
+            </Button>
           </div>
         </div>
         <div style={styles.links}>
@@ -243,6 +249,8 @@ export default connect(
     addFunction: () => ({ type: 'ADD_FUNCTION' }),
     addSymbol: () => ({ type: 'ADD_SYMBOL' }),
     shuffleArray: () => ({ type: 'SHUFFLE_ARRAY' }),
+    requestSuccess: () => ({ type: 'FOO_BAR', sequence: 'REQUEST_SUCCESS' }),
+    requestError: () => ({ type: 'FOO_BAR', sequence: 'REQUEST_ERROR' }),
     pushRoute
   }
 )(DemoApp);
