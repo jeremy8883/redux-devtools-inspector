@@ -7,6 +7,7 @@ import ActionTab from './tabs/ActionTab';
 
 import type { LabelRenderer } from 'react-json-tree';
 import type { Tab, TabName } from './types';
+import KeyBinder from './KeyBinder';
 
 type DefaultProps = {
   tabName: TabName
@@ -52,6 +53,16 @@ class ActionPreview extends Component<DefaultProps, Props, void> {
 
     return (
       <div key='actionPreview' {...styling('actionPreview')}>
+        <KeyBinder mappings={[{
+          key: 'alt-a',
+          onDown: () => onSelectTab('Action'),
+        }, {
+          key: 'alt-d',
+          onDown: () => onSelectTab('Diff'),
+        }, {
+          key: 'alt-s',
+          onDown: () => onSelectTab('State'),
+        }]} />
         <ActionPreviewHeader
           tabs={renderedTabs}
           {...{ styling, inspectedPath, onInspectPath, tabName, onSelectTab }}
