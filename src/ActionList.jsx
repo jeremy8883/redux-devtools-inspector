@@ -21,8 +21,6 @@ type Props = {
   selectedActionId: number,
   startActionId: null | number,
   onSelect: (e: SyntheticMouseEvent, actionId: number) => void,
-  onSelectNextAction: (e: SyntheticKeyboardEvent) => void,
-  onSelectPreviousAction: (e: SyntheticKeyboardEvent) => void,
   onSearch: (searchStr: string) => void,
   searchValue: string,
   currentActionId: number,
