@@ -64,18 +64,24 @@ export default class ActionList extends PureComponent<void, Props, void> {
     return actionIds.findIndex(R.equals(selectedActionId));
   }
 
-  getPreviousActionId() {
+  onPreviousAction(e) {
     const index = this.findSelectedActionIndex();
-    return index === -1 ?
+    const actionId = index === -1 ?
         this.props.lastActionId :
         this.props.actionIds[Math.max(0, index - 1)];
+    if (actionId !== this.props.selectedActionId) {
+      this.props.onSelect(e, actionId);
+    }
   }
 
-  getNextActionId() {
+  onNextAction(e) {
     const index = this.findSelectedActionIndex();
-    return index === -1 ?
+    const actionId = index === -1 ?
         this.props.lastActionId :
         this.props.actionIds[Math.min(this.props.actionIds.length - 1, index + 1)];
+    if (actionId !== this.props.selectedActionId) {
+      this.props.onSelect(e, actionId);
+    }
   }
 
   render() {
@@ -96,10 +102,10 @@ export default class ActionList extends PureComponent<void, Props, void> {
       >
         <KeyBinder mappings={ [{
           key: 'alt-up',
-          onDown: (e) => onSelect(e, this.getPreviousActionId()),
+          onDown: (e) => this.onPreviousAction(e),
         }, {
           key: 'alt-down',
-          onDown: (e) => onSelect(e, this.getNextActionId()),
+          onDown: (e) => this.onNextAction(e),
         }] } />
         <ActionListHeader styling={styling}
                           onSearch={onSearch}
