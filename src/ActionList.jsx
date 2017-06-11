@@ -6,6 +6,8 @@ import ActionListHeader from './ActionListHeader';
 
 import type { StylingFunction } from 'react-base16-styling';
 import type { Action } from './types';
+import KeyBinder from './KeyBinder';
+import * as R from 'ramda';
 
 type Props = {
   styling: StylingFunction,
@@ -57,6 +59,25 @@ export default class ActionList extends PureComponent<void, Props, void> {
     }
   }
 
+  findSelectedActionIndex() {
+    const { actionIds, selectedActionId } = this.props;
+    return actionIds.findIndex(R.equals(selectedActionId));
+  }
+
+  getPreviousActionId() {
+    const index = this.findSelectedActionIndex();
+    return index === -1 ?
+        this.props.lastActionId :
+        this.props.actionIds[Math.max(0, index - 1)];
+  }
+
+  getNextActionId() {
+    const index = this.findSelectedActionIndex();
+    return index === -1 ?
+        this.props.lastActionId :
+        this.props.actionIds[Math.min(this.props.actionIds.length - 1, index + 1)];
+  }
+
   render() {
     const { styling, actions, actionIds, isWideLayout, onToggleAction, skippedActionIds,
             selectedActionId, startActionId, onSelect, onSearch, searchValue, currentActionId,
@@ -73,6 +94,13 @@ export default class ActionList extends PureComponent<void, Props, void> {
           ['actionList', isWideLayout ? 'actionListWide' : null], isWideLayout
         )}
       >
+        <KeyBinder mappings={ [{
+          key: 'alt-up',
+          onDown: (e) => onSelect(e, this.getPreviousActionId()),
+        }, {
+          key: 'alt-down',
+          onDown: (e) => onSelect(e, this.getNextActionId()),
+        }] } />
         <ActionListHeader styling={styling}
                           onSearch={onSearch}
                           onCommit={onCommit}
