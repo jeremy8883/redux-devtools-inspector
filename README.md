@@ -1,3 +1,20 @@
+This is a personal fork of the redux-devtools-inspector. It aims to add a few extra features.
+
+Roadmap/wishlist:
+
+- [ ] Add shortcut key support
+- [ ] Auto expand state trees when it's obvious to do so
+- [ ] Customizable templates for the task list
+- [ ] Get a stack trace of where an action was dispatched
+- [ ] Better copy/paste support
+- [ ] Ability to auto restore a saved between page reloads
+- [ ] Ability to see the react diff as a result of an action (if this is possible)
+- [ ] Quick save and load of states (using simple local storage, not downloaded json files) 
+
+It is a work in progress - don't use this yet!
+
+----------
+
 # redux-devtools-inspector
 
 [![npm version](https://badge.fury.io/js/redux-devtools-inspector.svg)](https://badge.fury.io/js/redux-devtools-inspector)
