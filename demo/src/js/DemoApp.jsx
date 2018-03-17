@@ -14,6 +14,7 @@ import * as base16 from 'base16';
 import * as inspectorThemes from '../../../src/themes';
 import getOptions from './getOptions';
 import { push as pushRoute } from 'react-router-redux';
+import ErrorStackParser from 'error-stack-parser';
 
 const styles = {
   wrapper: {
@@ -173,6 +174,9 @@ class DemoApp extends React.Component {
             <Button onClick={this.props.requestError} style={styles.button}>
               Request Error
             </Button>
+            <Button onClick={this.props.stackTrace} style={styles.button}>
+              Stack Trace
+            </Button>
           </div>
         </div>
         <div style={styles.links}>
@@ -251,6 +255,7 @@ export default connect(
     shuffleArray: () => ({ type: 'SHUFFLE_ARRAY' }),
     requestSuccess: () => ({ type: 'FOO_BAR', sequence: 'REQUEST_SUCCESS' }),
     requestError: () => ({ type: 'FOO_BAR', sequence: 'REQUEST_ERROR' }),
+    stackTrace: () => ({ type: 'STACK_TRACE', trace: ErrorStackParser.parse(new Error()) }),
     pushRoute
   }
 )(DemoApp);

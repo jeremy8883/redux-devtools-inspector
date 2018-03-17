@@ -13,23 +13,12 @@ import DevtoolsInspector from '../../../src/DevtoolsInspector';
 import DockMonitor from 'redux-devtools-dock-monitor';
 import getOptions from './getOptions';
 import ActionListItemComponent from './ActionListItemComponent';
+import StackTrace from './StackTrace';
 
 function getDebugSessionKey() {
   const matches = window.location.href.match(/[?&]debug_session=([^&#]+)\b/);
   return (matches && matches.length > 0)? matches[1] : null;
 }
-
-const CustomComponent = () =>
-  <div style={{
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-    height: '100%',
-    minHeight: '20rem'
-  }}>
-    <div>Custom Tab Content</div>
-  </div>;
 
 const getDevTools = options =>
   createDevTools(
@@ -43,8 +32,8 @@ const getDevTools = options =>
                          supportImmutable={options.supportImmutable}
                          actionListItemComponent={ ActionListItemComponent }
                          tabs={defaultTabs => [{
-                           name: 'Custom Tab',
-                           component: CustomComponent
+                           name: 'Trace',
+                           component: StackTrace
                          }, ...defaultTabs]} />
     </DockMonitor>
   );
